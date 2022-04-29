@@ -35,11 +35,7 @@ package com.sun.codemodel.tests;
  * holder.
  */
 
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JFieldVar;
-import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JMod;
+import com.sun.codemodel.*;
 import com.sun.codemodel.writer.SingleStreamCodeWriter;
 
 /**
@@ -55,6 +51,8 @@ public class AnnotationSample {
         JFieldVar field = cls.field(JMod.PRIVATE,cm.DOUBLE,"y");
         field.annotate(Deprecated.class);
 
-        cm.build(new SingleStreamCodeWriter(System.out));
+        try (CodeWriter writer = new SingleStreamCodeWriter(System.out)) {
+            cm.build(writer);
+        }
     }
 }

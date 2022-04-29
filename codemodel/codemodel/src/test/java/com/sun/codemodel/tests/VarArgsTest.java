@@ -111,8 +111,10 @@ public class VarArgsTest {
             JMethod main = cls.method(JMod.PUBLIC | JMod.STATIC, cm.VOID, "main");
             main.param(stringArray, "args");
             main.body().directStatement("new Test().foo(new String(\"Param1\"),new Integer(5),null,new String(\"Param3\"),new String(\"Param4\"));" );//new String("Param1"))"");//                "new Integer(5),+//                "null," +//                "new String("first")," +//                " new String("Second"))");
-            
-            cm.build(new SingleStreamCodeWriter(System.out));
+
+            try (CodeWriter writer = new SingleStreamCodeWriter(System.out)) {
+                cm.build(writer);
+            }
         } catch (JClassAlreadyExistsException e) {
             
             e.printStackTrace();

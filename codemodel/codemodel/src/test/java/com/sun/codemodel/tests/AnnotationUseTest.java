@@ -39,16 +39,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.sun.codemodel.*;
 import org.junit.Test;
 
-import com.sun.codemodel.JAnnotationArrayMember;
-import com.sun.codemodel.JAnnotationUse;
-import com.sun.codemodel.JAnnotationWriter;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JEnumConstant;
-import com.sun.codemodel.JFieldVar;
-import com.sun.codemodel.JMod;
 import com.sun.codemodel.writer.SingleStreamCodeWriter;
 
 /**
@@ -117,7 +110,9 @@ public class AnnotationUseTest {
 		JAnnotationUse myuse = ause.annotationParam("foo", Target.class);
 		myuse.param("junk", 7);
 
-		cm.build(new SingleStreamCodeWriter(System.out));
+		try (CodeWriter writer = new SingleStreamCodeWriter(System.out)) {
+			cm.build(writer);
+		}
 	}
 
 	@interface XmlElement {

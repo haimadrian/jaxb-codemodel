@@ -55,7 +55,7 @@ import java.util.List;
  * This is a utility class for managing indentation and other basic
  * formatting for PrintWriter.
  */
-public final class JFormatter {
+public final class JFormatter implements AutoCloseable {
     /** all classes and ids encountered during the collection mode **/
     /** map from short type name to ReferenceList (list of JClass and ids sharing that name) **/
     private HashMap<String,ReferenceList> collectedReferences;
@@ -133,6 +133,7 @@ public final class JFormatter {
     /**
      * Closes this formatter.
      */
+    @Override
     public void close() {
         pw.close();
     }

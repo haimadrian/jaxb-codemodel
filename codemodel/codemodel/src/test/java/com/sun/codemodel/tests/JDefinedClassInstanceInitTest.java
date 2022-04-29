@@ -41,6 +41,8 @@
 package com.sun.codemodel.tests;
 
 import static org.junit.Assert.assertNotNull;
+
+import com.sun.codemodel.*;
 import japa.parser.JavaParser;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
@@ -52,11 +54,6 @@ import java.io.ByteArrayOutputStream;
 
 import org.junit.Test;
 
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JFieldVar;
-import com.sun.codemodel.JMod;
 import com.sun.codemodel.writer.OutputStreamCodeWriter;
 
 public class JDefinedClassInstanceInitTest {
@@ -71,11 +68,11 @@ public class JDefinedClassInstanceInitTest {
 		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		final String encoding = "UTF-8";
 //		cm.build(new OutputStreamCodeWriter(System.out, encoding));
-		cm.build(new OutputStreamCodeWriter(bos, encoding));
-		bos.close();
+		try (CodeWriter writer = new OutputStreamCodeWriter(bos, encoding)) {
+			cm.build(writer);
+		}
 
-		final ByteArrayInputStream bis = new ByteArrayInputStream(
-				bos.toByteArray());
+		final ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
 
 		CompilationUnit compilationUnit = JavaParser.parse(bis, encoding);
 

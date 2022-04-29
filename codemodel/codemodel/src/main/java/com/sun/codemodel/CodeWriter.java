@@ -55,7 +55,7 @@ import com.sun.codemodel.util.UnicodeEscapeWriter;
  * @author
  * 	Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public abstract class CodeWriter {
+public abstract class CodeWriter implements AutoCloseable {
 
     /**
      * Encoding to be used by the writer. Null means platform specific encoding.

@@ -271,13 +271,17 @@ public final class JCodeModel {
      *      if non-null, progress indication will be sent to this stream.
      */
     public void build( File srcDir, File resourceDir, PrintStream status ) throws IOException {
-        CodeWriter src = new FileCodeWriter(srcDir);
-        CodeWriter res = new FileCodeWriter(resourceDir);
         if(status!=null) {
-            src = new ProgressCodeWriter(src, status );
-            res = new ProgressCodeWriter(res, status );
+            try (CodeWriter src = new ProgressCodeWriter(new FileCodeWriter(srcDir), status );
+                 CodeWriter res = new ProgressCodeWriter(new FileCodeWriter(resourceDir), status )) {
+                build(src, res);
+            }
+        } else {
+            try (CodeWriter src = new FileCodeWriter(srcDir);
+                 CodeWriter res = new FileCodeWriter(resourceDir)) {
+                build(src, res);
+            }
         }
-        build(src,res);
     }
 
     /**
@@ -307,10 +311,8 @@ public final class JCodeModel {
     public void build( CodeWriter source, CodeWriter resource ) throws IOException {
         JPackage[] pkgs = packages.values().toArray(new JPackage[packages.size()]);
         // avoid concurrent modification exception
-        for( JPackage pkg : pkgs )
-            pkg.build(source,resource);
-        source.close();
-        resource.close();
+        for (JPackage pkg : pkgs)
+            pkg.build(source, resource);
     }
 
     /**

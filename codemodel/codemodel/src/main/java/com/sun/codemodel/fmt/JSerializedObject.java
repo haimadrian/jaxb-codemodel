@@ -69,8 +69,8 @@ public class JSerializedObject extends JResourceFile {
      */
     protected void build( OutputStream os ) throws IOException {
         // serialize the obj into a ByteArrayOutputStream
-        ObjectOutputStream oos = new ObjectOutputStream(os);
-        oos.writeObject(obj);
-        oos.close();
+        try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+            oos.writeObject(obj);
+        }
     }
 }

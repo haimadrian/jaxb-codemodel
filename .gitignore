@@ -1,0 +1,13 @@
+# Eclipse
+bin
+tmp
+
+# IntelliJ
+.idea
+*.iml
+
+# Build
+build
+target
+*.jar
+*.hprof

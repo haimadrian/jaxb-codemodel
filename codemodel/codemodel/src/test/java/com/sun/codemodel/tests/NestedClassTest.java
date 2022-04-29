@@ -36,6 +36,7 @@ package com.sun.codemodel.tests;
  * holder.
  */
 
+import com.sun.codemodel.CodeWriter;
 import org.junit.Test;
 
 import com.sun.codemodel.JCodeModel;
@@ -51,7 +52,9 @@ public class NestedClassTest {
 		JCodeModel cm = new JCodeModel();
 		JDefinedClass c = cm._package("foo")._class(0, "Foo");
 		c._extends(cm.ref(Bar.class));
-		cm.build(new SingleStreamCodeWriter(System.out));
+		try (CodeWriter writer = new SingleStreamCodeWriter(System.out)) {
+			cm.build(writer);
+		}
 	}
 
 	public static class Bar {

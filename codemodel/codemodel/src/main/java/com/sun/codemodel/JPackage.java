@@ -434,34 +434,33 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
             if (c.isHidden())
                 continue;   // don't generate this file
 
-            JFormatter f = createJavaSourceFileWriter(src, c.name());
-            f.write(c);
-            f.close();
+            try (JFormatter f = createJavaSourceFileWriter(src, c.name())) {
+                f.write(c);
+            }
         }
 
         // write package annotations
         if(annotations!=null || jdoc!=null) {
-            JFormatter f = createJavaSourceFileWriter(src,"package-info");
+            try (JFormatter f = createJavaSourceFileWriter(src,"package-info")) {
 
-            if (jdoc != null)
-                f.g(jdoc);
+                if (jdoc != null)
+                    f.g(jdoc);
 
-            // TODO: think about importing
-            if (annotations != null){
-                for (JAnnotationUse a : annotations)
-                    f.g(a).nl();
+                // TODO: think about importing
+                if (annotations != null) {
+                    for (JAnnotationUse a : annotations)
+                        f.g(a).nl();
+                }
+                f.d(this);
             }
-            f.d(this);
-
-            f.close();
         }
 
         // write resources
         for (JResourceFile rsrc : resources) {
             CodeWriter cw = rsrc.isResource() ? res : src;
-            OutputStream os = new BufferedOutputStream(cw.openBinary(this, rsrc.name()));
-            rsrc.build(os);
-            os.close();
+            try (OutputStream os = new BufferedOutputStream(cw.openBinary(this, rsrc.name()))) {
+                rsrc.build(os);
+            }
         }
     }
 

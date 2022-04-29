@@ -67,8 +67,8 @@ public class JTextFile extends JResourceFile
     }
     
     public void build( OutputStream out ) throws IOException {
-        Writer w = new OutputStreamWriter(out);
-        w.write(contents);
-        w.close();
+        try (Writer w = new OutputStreamWriter(out)) {
+            w.write(contents);
+        }
     }
 }

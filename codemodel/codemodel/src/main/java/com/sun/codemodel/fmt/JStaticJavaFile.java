@@ -115,27 +115,24 @@ public final class JStaticJavaFile extends JResourceFile {
     }
 
     protected  void build(OutputStream os) throws IOException {
-        InputStream is = source.openStream();
-        
-        BufferedReader r = new BufferedReader(new InputStreamReader(is));
-        PrintWriter w = new PrintWriter(new BufferedWriter(new OutputStreamWriter(os)));
-        LineFilter filter = createLineFilter();
-        int lineNumber=1;
-        
-        try {
-            String line;
-            while((line=r.readLine())!=null) {
-                line = filter.process(line);
-                if(line!=null)
-                    w.println(line);
-                lineNumber++;
+        try (InputStream is = source.openStream();
+             BufferedReader r = new BufferedReader(new InputStreamReader(is));
+             PrintWriter w = new PrintWriter(new BufferedWriter(new OutputStreamWriter(os)))) {
+            LineFilter filter = createLineFilter();
+            int lineNumber = 1;
+
+            try {
+                String line;
+                while ((line = r.readLine()) != null) {
+                    line = filter.process(line);
+                    if (line != null)
+                        w.println(line);
+                    lineNumber++;
+                }
+            } catch (ParseException e) {
+                throw new IOException("unable to process " + source + " line:" + lineNumber + "\n" + e.getMessage());
             }
-        } catch( ParseException e ) {
-            throw new IOException("unable to process "+source+" line:"+lineNumber+"\n"+e.getMessage());
         }
-        
-        w.close();
-        r.close();
     }
     
     /**

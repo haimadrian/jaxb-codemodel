@@ -39,6 +39,7 @@ package com.sun.codemodel.tests;
 import java.io.IOException;
 import java.lang.annotation.Inherited;
 
+import com.sun.codemodel.CodeWriter;
 import org.junit.Test;
 
 import com.sun.codemodel.JCodeModel;
@@ -52,6 +53,8 @@ public class PackageAnnotationTest {
 	public void main() throws IOException {
 		JCodeModel cm = new JCodeModel();
 		cm._package("foo").annotate(Inherited.class);
-		cm.build(new SingleStreamCodeWriter(System.out));
+		try (CodeWriter writer = new SingleStreamCodeWriter(System.out)) {
+			cm.build(writer);
+		}
 	}
 }

@@ -38,17 +38,9 @@ package com.sun.codemodel.tests;
 
 import java.util.ArrayList;
 
+import com.sun.codemodel.*;
 import org.junit.Test;
 
-import com.sun.codemodel.JClass;
-import com.sun.codemodel.JCodeModel;
-import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JFieldRef;
-import com.sun.codemodel.JForEach;
-import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JMod;
-import com.sun.codemodel.JVar;
 import com.sun.codemodel.writer.SingleStreamCodeWriter;
 
 /**
@@ -86,6 +78,8 @@ public class ForEachTest {
 		// JInvocation invocation =
 		foreach.body().invoke(out1, "println").arg($count1);
 
-		cm.build(new SingleStreamCodeWriter(System.out));
+		try (CodeWriter writer = new SingleStreamCodeWriter(System.out)) {
+			cm.build(writer);
+		}
 	}
 }
